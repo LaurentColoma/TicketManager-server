@@ -2,35 +2,32 @@
 ## Server side:
 
 ### Introduction
-This is the back-end of a Ticket managing web-application.
-This side of the apps is made using [Django](https://www.djangoproject.com/), a high level [Python](https://www.python.org/) framework.
+This is the backend of a ticket managing web-application.
+It has been developed using Django [Django](https://www.djangoproject.com/), a high level [Python](https://www.python.org/) framework.
 ### Licence
-Every code is under the [MIT](https://en.wikipedia.org/wiki/MIT_License) licence, you are totally free to re-use it for whatever purpose you want.
+The entire code is under the [MIT](https://en.wikipedia.org/wiki/MIT_License) licence, you are totally free to re-use it for whatever purpose you want.
 ### Installation
-#### - What you need:
-	* postgresql
-	* virtualenv
+#### - Prerequisites:
 Beforehand, It would be better if you check if you have any package that need an update.
 ````bash
 sudo apt update
 sudo apt upgrade
 ````
-We can now start the installation.
-##### 0- Cloning
+Also don't forget to clone!
 ````bash
 git clone https://github.com/LaurentColoma/TicketManager-server.git
 ````
 
 ##### 1 - Postgresql
-We can now start by installing and setting up **Postgresql**
+You can now start by installing and setting up **Postgresql**
 ````bash
 sudo apt install postgresql postgresql-contrib
 ````
-Let's see if everything is running well.
+Check if everything is running well.
 ````
 service postgresql status
 ````
-You should get something like this : 
+You should get something like this: 
 ````
 ● postgresql.service - PostgreSQL RDBMS
    Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
@@ -45,38 +42,39 @@ nov. 01 11:43:54 $your_computer_name systemd[1]: Starting PostgreSQL RDBMS...
 nov. 01 11:43:54 $your_computer_name systemd[1]: Started PostgreSQL RDBMS.
 nov. 01 11:43:58 $your_computer_name systemd[1]: Started PostgreSQL RDBMS.
 ````
-Let's continue
+You can now launch postgres.
 ````
 sudo -i -u postgres
 psql
 ````
-Your terminal should be like this : 
+Your terminal should display the following: 
 ````bash
 psql (9.5.14)
 Type "help" for help.
 
 postgres=#
 ````
-Then we will create a *User* and a *Database*, it will be needed for the good usage of the back-end.
-**Creating User**
+Then you will create a *User* and a *Database*, it will be needed for the good usage of the backend.
+
+**Creating a User**
 ````sql
 postgres=# CREATE USER $your_user_name WITH PASSWORD '$your_password';
 CREATE ROLE
 ````
 > The usage of the simple quote around  $your_password and the semi-colon at the end of each request is very important
 
-**Creating Database**
+**Creating a Database**
 ````sql
 postgres=# CREATE DATABASE $your_database_name;
 CREATE DATABASE
 ````
 Congratulations, you should have manage to create your user and your database.
-To quit psql and postgresql just do :
+To quit psql and postgresql just do:
 ````sql
 \q
 exit
 ````
-Before going further, you will need to update a file according to the different elements you have just created.
+Before going further, you need to update a file according to the different elements you have just created.
 *~/server/Components/settings.py*
 Your modification will take place from line 89 to 98:
 ````python
@@ -112,7 +110,7 @@ Just launch it!
 ````bash
 source ~server/virtualenv/bin/activate
 ````
-We need to create an admin user for the server now.
+You need to create an admin user for the server now.
 ````bash
 sudo ./manage.py createsuperuser
 Username: $your_username
@@ -126,7 +124,7 @@ Now you just have to update and then launch the server.
 sudo ./manage.py migrate
 sudo ./manage.py runserver
 ````
-You should gets something like this at this point
+You should get something like this at this point
 ````
 /usr/local/lib/python2.7/dist-packages/psycopg2/__init__.py:144: UserWarning: The psycopg2 wheel package will be renamed from release 2.8; in order to keep installing from binary please use "pip install psycopg2-binary" instead. For details see: <http://initd.org/psycopg/docs/install.html#binary-install-from-pypi>.
   """)
