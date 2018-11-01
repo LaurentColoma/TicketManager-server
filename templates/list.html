@@ -1,0 +1,291 @@
+{% extends "backoffice_template.html" %}
+{% load i18n %}
+
+{% block javascript %}
+    <script type="application/javascript">
+
+        $.fn.editable.defaults.mode = 'inline';
+        datatableview.auto_initialize = false;
+
+        $(document).ready(function() {
+
+            $("#planned_validation_box_ko").click(function () {
+                $("#planned_validation_box").hide();
+            });
+
+            $('#planned_validation_box_ok').click(function() {
+                $("#planned_validation_box").hide();
+
+                $.ajax({
+                    mimeType: "text/html; charset=utf-8",
+                    url: "/quality/batch/analysis/" + $(this).attr("rel-id") + "/validate/",
+                    type: "POST",
+                    data: {
+                        status: "sampled",
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                    },
+                    success: function(data) {
+                        var table = $('.datatable').dataTable();
+                        table.fnStandingRedraw();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Unexpected error: please open a ticket");
+                    },
+                    dataType: "html",
+                    async: false
+                });
+
+            });
+
+            $("#sampled_validation_box_ko").click(function () {
+                $("#sampled_validation_box").hide();
+            });
+
+            $('#sampled_validation_box_ok').click(function() {
+                $("#sampled_validation_box").hide();
+
+                $.ajax({
+                    mimeType: "text/html; charset=utf-8",
+                    url: "/quality/batch/analysis/" + $(this).attr("rel-id") + "/validate/",
+                    type: "POST",
+                    data: {
+                        status: "sent",
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                    },
+                    success: function(data) {
+                        var table = $('.datatable').dataTable();
+                        table.fnStandingRedraw();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Unexpected error: please open a ticket");
+                    },
+                    dataType: "html",
+                    async: false
+                });
+
+            });
+
+            $("#sent_validation_box_ko").click(function () {
+                $("#sent_validation_box").hide();
+            });
+
+            $('#sent_validation_box_ok').click(function() {
+                $("#sent_validation_box").hide();
+
+                $.ajax({
+                    mimeType: "text/html; charset=utf-8",
+                    url: "/quality/batch/analysis/" + $(this).attr("rel-id") + "/validate/",
+                    type: "POST",
+                    data: {
+                        status: "on_hold",
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                    },
+                    success: function(data) {
+                        var table = $('.datatable').dataTable();
+                        table.fnStandingRedraw();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Unexpected error: please open a ticket");
+                    },
+                    dataType: "html",
+                    async: false
+                });
+
+            });
+
+            function AddAjaxContent(url){
+                $(".preloader").show();
+                $.ajax({
+                    mimeType: "text/html; charset=utf-8",
+                    url: url,
+                    type: "GET",
+                    success: function(data) {
+                        $("#ajax-content").html(data+$("#ajax-content").html());
+                        $(".preloader").hide();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    },
+                    dataType: "html",
+                    async: false
+                });
+            }
+
+            var data_table = datatableview.initialize($('.datatable'), {
+                fnRowCallback: datatableview.make_xeditable(),
+                "createdRow": function ( row, data, index ) {
+                    if ( data[9] == "draft" ) {
+                        $('td', row).eq(8).html('<button type="button" rel-id="' + data[0] + '" class="btn btn-warning btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Draft</button><button type="button" rel-id="' + data[0] + '" class="dt-detail btn btn-primary"><span><i class="fa fa-eye"></i></span></button><button type="button" rel-id="' + data[0] + '" class="dt-edit btn btn-primary"><span><i class="fa fa-pencil"></i></span></button>'); // Column 1 hidden, so data 9 match column 8
+                    } else if ( data[9] == "open" ) {
+                        $('td', row).eq(8).html('<button type="button" rel-id="' + data[0] + '" class="btn btn-warning btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Open</button><button type="button" rel-id="' + data[0] + '" class="dt-detail btn btn-primary"><span><i class="fa fa-eye"></i></span></button><button type="button" rel-id="' + data[0] + '" class="dt-edit btn btn-primary"><span><i class="fa fa-pencil"></i></span></button>'); // Column 1 hidden, so data 9 match column 8
+                    } else if ( data[9] == "dismissed" ) {
+                        $('td', row).eq(8).html('<button type="button" rel-id="' + data[0] + '" class="btn btn-danger btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Dismissed</button><button type="button" rel-id="' + data[0] + '" class="dt-detail btn btn-primary"><span><i class="fa fa-eye"></i></span></button>'); // Column 1 hidden, so data 9 match column 8
+                    } else if ( data[9] == "on_hold" ) {
+                        $('td', row).eq(8).html('<button type="button" rel-id="' + data[0] + '" class="btn btn-warning btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>On hold</button><button type="button" rel-id="' + data[0] + '" class="dt-detail btn btn-primary"><span><i class="fa fa-eye"></i></span></button><button type="button" rel-id="' + data[0] + '" class="dt-edit btn btn-primary"><span><i class="fa fa-pencil"></i></span></button>'); // Column 1 hidden, so data 9 match column 8
+                    } else if ( data[9] == "planed" ) {
+                        $('td', row).eq(8).html('<button type="button" rel-id="' + data[0] + '" class="btn btn-primary btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Planed</button><button type="button" rel-id="' + data[0] + '" class="dt-detail btn btn-primary"><span><i class="fa fa-eye"></i></span></button><button type="button" rel-id="' + data[0] + '" class="dt-edit btn btn-primary"><span><i class="fa fa-pencil"></i></span></button>'); // Column 1 hidden, so data 9 match column 8
+                    } else if ( data[9] == "in_progress" ) {
+                        $('td', row).eq(8).html('<button type="button" rel-id="' + data[0] + '" class="btn btn-primary btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>In progress</button><button type="button" rel-id="' + data[0] + '" class="dt-detail btn btn-primary"><span><i class="fa fa-eye"></i></span></button><button type="button" rel-id="' + data[0] + '" class="dt-edit btn btn-primary"><span><i class="fa fa-pencil"></i></span></button>'); // Column 1 hidden, so data 9 match column 8
+                    } else if ( data[9] == "dropped" ) {
+                        $('td', row).eq(8).html('<button type="button" rel-id="' + data[0] + '" class="btn btn-danger btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Dropped</button><button type="button" rel-id="' + data[0] + '" class="dt-detail btn btn-primary"><span><i class="fa fa-eye"></i></span></button>'); // Column 1 hidden, so data 9 match column 8
+                    } else if ( data[9] == "ready" ) {
+                        $('td', row).eq(8).html('<button type="button" rel-id="' + data[0] + '" class="btn btn-success btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Ready</button><button type="button" rel-id="' + data[0] + '" class="dt-detail btn btn-primary"><span><i class="fa fa-eye"></i></span></button><button type="button" rel-id="' + data[0] + '" class="dt-edit btn btn-primary"><span><i class="fa fa-pencil"></i></span></button>'); // Column 1 hidden, so data 9 match column 8
+                    } else if ( data[9] == "tested" ) {
+                        $('td', row).eq(8).html('<button type="button" rel-id="' + data[0] + '" class="btn btn-success btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Tested</button><button type="button" rel-id="' + data[0] + '" class="dt-detail btn btn-primary"><span><i class="fa fa-eye"></i></span></button><button type="button" rel-id="' + data[0] + '" class="dt-edit btn btn-primary"><span><i class="fa fa-pencil"></i></span></button>'); // Column 1 hidden, so data 9 match column 8
+                    } else if ( data[9] == "validated" ) {
+                        $('td', row).eq(8).html('<button type="button" rel-id="' + data[0] + '" class="btn btn-success btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Validated</button><button type="button" rel-id="' + data[0] + '" class="dt-detail btn btn-primary"><span><i class="fa fa-eye"></i></span></button>'); // Column 1 hidden, so data 9 match column 8
+                    } else {
+                        $('td', row).eq(8).html('<button type="button" class="btn btn-danger btn-label-left"><span><i class="fa fa-fw fa-thumbs-down"></i></span>Error</button><button type="button" rel-id="' + data[0] + '" class="dt-detail btn btn-primary"><span><i class="fa fa-eye"></i></span></button>'); // Column 1 hidden
+                    }
+
+                    $('td', row).eq(8).children("button.dt-detail").click(function () {
+
+                        var id = $(this).attr("rel-id");
+                        var url = "/tracker/" + id + "/";
+
+                        if ($("#detail_" + id).length) {
+                            $("#detail_" + id + " .close-link").trigger("click");
+                        } else {
+                            AddAjaxContent(url);
+                        }
+                        $(this).toggleClass("active");
+
+                    });
+
+                    $('td', row).eq(8).children("button.dt-edit").click(function () {
+
+                        window.location.href = "/tracker/" + $(this).attr("rel-id") + "/update/";
+
+                    });
+
+                },
+            });
+
+            $(".preloader").hide();
+
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <div id="planned_validation_box" class="validation box ui-draggable ui-droppable expanded expanded-padding" style="display: none;">
+        <div class="box-header">
+            <div class="box-name ui-draggable-handle">
+                <i class="fa fa-fw fa-search"></i>
+                <span>{% trans "Validation confirmation" %}</span>
+            </div>
+            <div class="no-move"></div>
+        </div>
+
+        <div class="box-content">
+            <div id="planned_validation-content">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <h1>{% trans "Have you made the sample ?" %}</h1>
+                        <p>{% trans "Validation is always a definitive action. Once validated, the data will not be modifiable anymore." %}</p>
+                        <p>{% trans "If you find out that you have made a mistake in this procedure, you will not be able to correct it." %}</p>
+                        <a href="#" id="planned_validation_box_ok" class="btn btn-default btn-success" role="button">{% trans "Validate" %}</a>
+                        <a href="#" id="planned_validation_box_ko" class="btn btn-default btn-danger" href="#" role="button">{% trans "Get back" %}</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div id="sampled_validation_box" class="validation box ui-draggable ui-droppable expanded expanded-padding" style="display: none;">
+        <div class="box-header">
+            <div class="box-name ui-draggable-handle">
+                <i class="fa fa-fw fa-search"></i>
+                <span>{% trans "Validation confirmation" %}</span>
+            </div>
+            <div class="no-move"></div>
+        </div>
+
+        <div class="box-content">
+            <div id="sampled_validation-content">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <h1>{% trans "Have you sent the sample ?" %}</h1>
+                        <p>{% trans "Validation is always a definitive action. Once validated, the data will not be modifiable anymore." %}</p>
+                        <p>{% trans "If you find out that you have made a mistake in this procedure, you will not be able to correct it." %}</p>
+                        <a href="#" id="sampled_validation_box_ok" class="btn btn-default btn-success" role="button">{% trans "Validate" %}</a>
+                        <a href="#" id="sampled_validation_box_ko" class="btn btn-default btn-danger" href="#" role="button">{% trans "Get back" %}</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div id="sent_validation_box" class="validation box ui-draggable ui-droppable expanded expanded-padding" style="display: none;">
+        <div class="box-header">
+            <div class="box-name ui-draggable-handle">
+                <i class="fa fa-fw fa-search"></i>
+                <span>{% trans "Validation confirmation" %}</span>
+            </div>
+            <div class="no-move"></div>
+        </div>
+
+        <div class="box-content">
+            <div id="sent_validation-content">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <h1>{% trans "Have you receive the sample ?" %}</h1>
+                        <p>{% trans "Validation is always a definitive action. Once validated, the data will not be modifiable anymore." %}</p>
+                        <p>{% trans "If you find out that you have made a mistake in this procedure, you will not be able to correct it." %}</p>
+                        <a href="#" id="sent_validation_box_ok" class="btn btn-default btn-success" role="button">{% trans "Validate" %}</a>
+                        <a href="#" id="sent_validation_box_ko" class="btn btn-default btn-danger" href="#" role="button">{% trans "Get back" %}</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="box">
+        <div class="box-header">
+            <div class="box-name ui-draggable-handle">
+                <i class="fa fa-fw fa-search"></i>
+                <span>{% trans "Ticket list" %}</span>
+            </div>
+            <div class="box-icons">
+                <a class="create-new" href="{% url 'kaoka_tracker:create' 'proposal' %}">
+                    <abbr title="{% trans 'New proposal' %}"><i class="fa fa-plus-circle text-success"></i></abbr>
+                </a>
+                <a class="create-new" href="{% url 'kaoka_tracker:create' 'anomaly' %}">
+                    <abbr title="{% trans 'New anomaly' %}"><i class="fa fa-plus-circle text-danger"></i></abbr>
+                </a>
+                <a class="create-new" href="{% url 'kaoka_tracker:create' 'task' %}">
+                    <abbr title="{% trans 'New task' %}"><i class="fa fa-plus-circle text-primary"></i></abbr>
+                </a>
+                <a class="create-new" href="{% url 'kaoka_tracker:create' 'process' %}">
+                    <abbr title="{% trans 'New process' %}"><i class="fa fa-plus-circle text-warning"></i></abbr>
+                </a>
+                <a class="export" href="{% url 'kaoka_tracker:export' %}">
+                    <abbr title="{% trans 'Create an export' %}"><i class="fa fa-save"></i></abbr>
+                </a>
+                <a class="collapse-link">
+                    <abbr title="{% trans 'Collapse' %}"><i class="fa fa-chevron-up"></i></abbr>
+                </a>
+                <a class="expand-link">
+                    <abbr title="{% trans 'Expand' %}"><i class="fa fa-expand"></i></abbr>
+                </a>
+            </div>
+            <div class="no-move"></div>
+        </div>
+        <div class="box-content">
+            <div id="list-content">
+                {{ datatable }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static "./css/styles.css" %}"
+          type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+          crossorigin="anonymous">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"
+          rel="stylesheet">
+    <title>Accueil</title>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron" style="background-color: dodgerblue;">
+            <h2>Créer un évènement:</h2>
+            <form>
+                <label for="date">Date:</label>
+                <input class="form-control form control-lg" id="date"
+                       type="date" placeholder="aaaa/mm/jj">
+                <br />
+                <label for="time">Heure de début: </label>
+                <input class="form-control form control-lg" id="hour" type="hour">
+                <br />
+                <button class="btn btn-lg">Créer et Envoyer les mails</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

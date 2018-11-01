@@ -1,0 +1,18 @@
+[
+  {
+    "model": "tracker.version",
+    "pk": "1",
+    "fields": {
+      "label": "V 0.1",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.version",
+    "pk": "2",
+    "fields": {
+      "label": "V 0.2",
+      "application": 1
+    }
+  }
+]

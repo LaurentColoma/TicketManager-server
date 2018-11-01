@@ -1,2 +1,0 @@
-# TicketManager-server
-Django server

@@ -1,0 +1,264 @@
+{% extends is_ajax|yesno:"ajax_template.html,backoffice_template.html" %}
+{% load i18n %}
+
+{% block javascript %}
+    <script type="application/javascript">
+        $(document).ready(function() {
+
+            $(".helptext").hide();
+
+            TinyMCEStart(".form-control.mce", null);
+
+            $(".preloader").hide();
+
+        });
+    </script>
+{% endblock %}
+{% block content %}
+
+<div id="detail_{{ object.id }}" class="detail box ui-draggable ui-droppable">
+    <div class="box-header">
+        <div class="box-name ui-draggable-handle">
+            <i class="fa fa-fw fa-search"></i>
+            <span>{% trans "Ticket #" %}{{ object.number}} :: {{object.get_type_display}} :: {{ object.label }}</span>
+        </div>
+        <div class="box-icons">
+            {% if object.editable %}
+            <a class="edit-link" href="{% url 'kaoka_tracker:edit' object.id %}">
+                <i class="fa fa-pencil"></i>
+            </a>
+            {% endif %}
+            <a class="collapse-link">
+                <i class="fa fa-chevron-up"></i>
+            </a>
+            <a class="expand-link">
+                <i class="fa fa-expand"></i>
+            </a>
+            <a class="close-link">
+                <i class="fa fa-times"></i>
+            </a>
+        </div>
+        <div class="no-move"></div>
+    </div>
+
+    <div class="box-content">
+        <div id="details-content">
+            <div class="container-fluid">
+
+
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <div class="panel panel-primary">
+
+                            <div class="panel-heading">{% trans "Context" %}</div>
+
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label" style="text-align: right;">{% trans "Application" %}</label>
+                                    <div class="col-sm-2 value"><input readonly="readonly" value="{{ object.application }}" /></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" style="text-align: right;">{% trans "Versions affected" %}</label>
+                                    <div class="col-sm-2 value">
+                                        {% for v in object.version_affected_set.all %}
+                                            <p><input readonly="readonly" value="{{ v.label }}" /></p>
+                                        {% empty %}
+                                            <p>--</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label" style="text-align: right;">{% trans "Modules" %}</label>
+                                    <div class="col-sm-4 value">
+                                        {% for m in object.module_set.all %}
+                                            <p><input readonly="readonly" value="{{ m.label }}" /></p>
+                                        {% empty %}
+                                            <p>--</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel-footer" style="min-height: 48px;">
+                                    <label class="col-sm-offset-6 col-sm-1 control-label">{% trans "Target" %}</label>
+                                    <p class="col-sm-2 value"><input readonly="readonly" value="{{ object.get_version_targeted_display }}" /></p>
+                                    <label class="col-sm-1 control-label">{% trans "Released in" %}</label>
+                                    <p class="col-sm-2 value"><input readonly="readonly" value="{{ object.get_version_released_display }}" /></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-sm-4">
+
+                        <div class="panel panel-primary">
+
+                            <div class="panel-heading">{% trans "Main details" %}</div>
+
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label" style="text-align: right;">{% trans "Impact" %}</label>
+                                    <div class="col-sm-7 value"><input readonly="readonly" value="{{ object.impact }}" /></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label" style="text-align: right;">{% trans "Priority" %}</label>
+                                    <div class="col-sm-7 value"><input readonly="readonly" value="{{ object.priority }}" /></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label" style="text-align: right;">{% trans "Time sensitiveness" %}</label>
+                                    <div class="col-sm-7 value"><input readonly="readonly" value="{{ object.time_sensitiveness }}" /></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label" style="text-align: right;">{% trans "Reproducibility" %}</label>
+                                    <div class="col-sm-7 value"><input readonly="readonly" value="{{ object.reproducibility }}" /></div>
+                                </div>
+                                {% if object.original %}
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label" style="text-align: right;">{% trans "This ticket is a duplicate of:" %}</label>
+                                    <div class="col-sm-7 value"><a href="{% url 'kaoka_tracker:detail' object.original.id %}">{{ object.original }}</a></div>
+                                </div>
+                                {% endif %}
+                                {% if object.duplicate_set.count %}
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label" style="text-align: right;">{% trans "This ticket has duplicates" %}</label>
+                                    <div class="col-sm-7 value">
+                                        {% for duplicate in object.duplicate_set.all %}
+                                            <a href="{% url 'kaoka_tracker:detail' duplicate.id %}">
+                                                #{ duplicate.number }} :: {{ duplicate.label }}
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="panel-footer">
+                                <img src="{{ STATIC_URL }}images/Status.png" width="15px" height="15px" alt="Status" />&nbsp;:
+                                {% if object.status.label == "draft" %}
+                                <button type="button" rel-id="' + data[0] + '" class="btn btn-warning btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Draft</button>
+                                {% elif object.status.label == "open" %}
+                                <button type="button" rel-id="' + data[0] + '" class="btn btn-warning btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Open</button>
+                                {% elif object.status.label == "dismissed" %}
+                                <button type="button" rel-id="' + data[0] + '" class="btn btn-danger btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Dismissed</button>
+                                {% elif object.status.label == "on_hold" %}
+                                <button type="button" rel-id="' + data[0] + '" class="btn btn-warning btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>On hold</button>
+                                {% elif object.status.label == "planed" %}
+                                <button type="button" rel-id="' + data[0] + '" class="btn btn-primary btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Planed</button>
+                                {% elif object.status.label == "in_progress" %}
+                                <button type="button" rel-id="' + data[0] + '" class="btn btn-primary btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>In progress</button>
+                                {% elif object.status.label == "dropped" %}
+                                <button type="button" rel-id="' + data[0] + '" class="btn btn-danger btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Dropped</button>
+                                {% elif object.status.label == "ready" %}
+                                <button type="button" rel-id="' + data[0] + '" class="btn btn-success btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Ready</button>
+                                {% elif object.status.label == "tested" %}
+                                <button type="button" rel-id="' + data[0] + '" class="btn btn-success btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Tested</button>
+                                {% elif object.status.label == "validated" %}
+                                <button type="button" rel-id="' + data[0] + '" class="btn btn-success btn-label-left"><span><i class="fa fa-fw fa-bug"></i></span>Validated</button>
+                                {% else %}
+                                <button type="button" class="btn btn-danger btn-label-left"><span><i class="fa fa-fw fa-thumbs-down"></i></span>Error</button>
+                                {% endif %}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-sm-8">
+
+                        <div class="panel panel-primary">
+
+                            <div class="panel-heading">{% trans "Desccription" %}</div>
+
+                            <div class="panel-body">
+                                {{ object.description|safe }}
+                            </div>
+
+                        </div>
+
+                        <div class="panel panel-primary">
+
+                            <div class="panel-heading">{% trans "RACI" %}</div>
+
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" style="text-align: right;">{% trans "Responsible" %}</label>
+                                    <div class="col-sm-4 value"><input readonly="readonly" value="{{ object.responsible.label }}" /></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" style="text-align: right;">{% trans "Accountable" %}</label>
+                                    <div class="col-sm-4 value"><input readonly="readonly" value="{{ object.accountable.label }}" /></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" style="text-align: right;">{% trans "Consulted" %}</label>
+                                    <div class="col-sm-4 value">
+                                        {% for o in object.consulted_set.all %}
+                                            <p><input readonly="readonly" value="{{ o.label }}" /></p>
+                                        {% empty %}
+                                            <p><input readonly="readonly" value="{% trans 'None' %}" /></p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" style="text-align: right;">{% trans "Informed" %}</label>
+                                    <div class="col-sm-4 value">
+                                        {% for o in object.informed_set.all %}
+                                            <p><input readonly="readonly" value="{{ o.label }}" /></p>
+                                        {% empty %}
+                                            <p><input readonly="readonly" value="{% trans 'None' %}" /></p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-sm-12">
+
+                        <div class="panel panel-primary">
+
+                            <div class="panel-heading">{% trans "Comments" %}&nbsp;&nbsp;<img src="{{ STATIC_URL }}images/Comment.png" width="15px" height="15px" alt="Comment" /></div>
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>{% trans "Author" %}</th>
+                                        <th>{% trans "Number" %}</th>
+                                        <th>{% trans "Comment" %}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in object.comment_set.all %}
+                                    <tr>
+                                        <td>{{ item.author }}</td>
+                                        <td>{{ item.number }}</td>
+                                        <td>{{ item.comment|safe }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,156 @@
+[
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "base",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "util",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_util",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_actor",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_quality",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_product",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_quality_product",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_stock_product",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_flow_product",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_lot",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_flow_lot",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_bag",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_quality_lot",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_stock_bag",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_flow_bag",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_inventory",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_sep",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_flow_batch",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_quality_batch",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_dashboard",
+      "application": 1
+    }
+  },
+  {
+    "model": "tracker.module",
+    "fields": {
+      "label": "kaoka_tracker",
+      "application": 1
+    }
+  }
+]

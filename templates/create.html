@@ -1,0 +1,75 @@
+{% extends "backoffice_template.html" %}
+{% load i18n %}
+
+{% block javascript %}
+    <script type="application/javascript">
+
+        $(document).ready(function() {
+
+            $(".helptext").hide();
+
+            $("select.select2").select2();
+
+            $(".form-control.date-picker").datepicker({
+                setDate: new Date(),
+                closeText: 'Fermer',
+                prevText: 'Précédent',
+                nextText: 'Suivant',
+                currentText: 'Aujourd\'hui',
+                monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+                dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+                dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+                weekHeader: 'Sem.',
+                dateFormat: 'yy-mm-dd',
+            });
+
+            TinyMCEStart(".form-control.mce", null);
+
+            $(".preloader").hide();
+
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+            <div id="details-content">
+
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <div class="col-sm-6">
+
+                            <form class="form-horizontal" role="form" method="post">
+                                <div class="panel panel-primary">
+
+                                    <div class="panel-heading">{% trans "Create a new " %} {{ ticket_type }}</div>
+
+                                    <div class="panel-body">
+                                            {% csrf_token %}
+                                            {{ form }}
+                                    </div>
+
+                                    <div class="panel-footer">
+                                        <div class="btn-toolbar pull-right" role="toolbar">
+                                            <button class="btn-group btn-primary btn-label-left" role="group" type="submit">
+                                                <span><i class="fa fa-caret-square-o-right"></i></span>{% trans "Submit form" %}
+                                            </button>
+                                            <button class="btn-group btn-label-left" role="group" type="cancel">
+                                                <span><i class="fa fa-trash text-danger"></i></span>{% trans "Reset form" %}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+{% endblock %}

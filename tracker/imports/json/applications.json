@@ -1,0 +1,9 @@
+[
+  {
+    "model": "tracker.application",
+    "pk": 1,
+    "fields": {
+      "label": "KAOKA_CRM"
+    }
+  }
+]

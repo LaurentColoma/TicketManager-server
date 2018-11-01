@@ -1,0 +1,23 @@
+[
+  {
+    "model": "tracker.priority",
+    "fields": {
+      "label": "useful",
+      "color": "#77B5FE"
+    }
+  },
+  {
+    "model": "tracker.priority",
+    "fields": {
+      "label": "necessary",
+      "color": "#3A8EBA"
+    }
+  },
+  {
+    "model": "tracker.priority",
+    "fields": {
+      "label": "indispensable",
+      "color": "#22427C"
+    }
+  }
+]

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <script src="{% static "./javascript/jquery/jquery3.2.1.js" %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "./javascript/dhtmlxsuite/dhtmlx.js" %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "./javascript/dhtmlxscheduler/scheduler.js" %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "./javascript/dhtmlxscheduler/recurring.js" %}" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="{% static "./css/dhtmlxscheduler/schedulercss.css" %}" type="text/css" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{% static "./css/dhtmlxscheduler/style.css" %}" type="text/css" title="no title" charset="utf-8">
+    <title>Schedule</title>
+</head>
+<script type="text/javascript" charset="utf-8">
+    function modSchedHeight() {
+        var headHeight = 100;
+        var sch = document.getElementById("scheduler_here");
+         sch.style.height = (parseInt(document.body.offsetHeight) - headHeight) + "px";
+    }
+
+	function init() {
+		window.resizeTo(950,700)
+		modSchedHeight();
+		scheduler.config.xml_date="%Y-%m-%d %H:%i";
+		scheduler.config.details_on_create=true;
+		scheduler.config.details_on_dblclick=true;
+		scheduler.init('scheduler_here',new Date(2017,8,11),"month");
+		scheduler.load('{% url "manage_schedule" %}', 'json');
+    }
+
+    $( document ).ready(function() {
+        init();
+    });
+
+    var csrftoken;
+
+    $(document).ready(function() {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        csrftoken = getCookie('csrftoken');
+    });
+
+    $( window ).resize(function() {
+        modSchedHeight();
+    });
+
+    scheduler.attachEvent("onEventAdded",function(id){
+        var ev = scheduler.getEvent(id);
+        var start_date = scheduler.templates.xml_format(ev.start_date);
+        var end_date = scheduler.templates.xml_format(ev.end_date);
+        var text = ev.text;
+
+        window.dhx4.ajax.post(
+            "/schedule/manage_schedule/",
+            "id="+id+"&start="+start_date+"&end="+end_date+"&text="+text+"&csrfmiddlewaretoken="+csrftoken,
+            function(r){
+                alert(r);
+            }
+        );
+    })
+
+    scheduler.attachEvent("onEventChanged",function(id){
+        var ev = scheduler.getEvent(id);
+        var start_date = scheduler.templates.xml_format(ev.start_date);
+        var end_date = scheduler.templates.xml_format(ev.end_date);
+        var text = ev.text;
+
+        window.dhx4.ajax.put(
+            "/schedule/manage_schedule/",
+            "id="+id+"&start="+start_date+"&end="+end_date+"&text="+text+"&csrfmiddlewaretoken="+csrftoken,
+            function(r){
+                alert(r);
+            }
+        );
+    })
+
+{#    scheduler.attachEvent("onEventDeleted",function(id){#}
+{#        window.dhx4.ajax.post("/schedule/delete_object/", "id="+id+"&csrfmiddlewaretoken="+csrftoken);#}
+{#    })#}
+
+
+</script>
+{% csrf_token %}
+<body>
+	<div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
+		<div class="dhx_cal_navline">
+			<div class="dhx_cal_prev_button">&nbsp;</div>
+			<div class="dhx_cal_next_button">&nbsp;</div>
+			<div class="dhx_cal_today_button"></div>
+			<div class="dhx_cal_date"></div>
+			<div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+			<div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+			<div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+		</div>
+		<div class="dhx_cal_header">
+		</div>
+		<div class="dhx_cal_data">
+		</div>
+	</div>
+</body>
+</html>

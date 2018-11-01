@@ -1,0 +1,38 @@
+[
+  {
+    "model": "tracker.anomalycategorie",
+    "fields": {
+      "label": "Malfunction"
+    }
+  },
+  {
+    "model": "tracker.anomalycategorie",
+    "fields": {
+      "label": "Typography error"
+    }
+  },
+  {
+    "model": "tracker.anomalycategorie",
+    "fields": {
+      "label": "Translation error"
+    }
+  },
+  {
+    "model": "tracker.anomalycategorie",
+    "fields": {
+      "label": "Layout error"
+    }
+  },
+  {
+    "model": "tracker.anomalycategorie",
+    "fields": {
+      "label": "Performance issue"
+    }
+  },
+  {
+    "model": "tracker.anomalycategorie",
+    "fields": {
+      "label": "Crash"
+    }
+  }
+]

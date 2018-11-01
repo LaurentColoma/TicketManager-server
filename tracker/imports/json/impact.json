@@ -1,0 +1,38 @@
+[
+  {
+    "model": "tracker.impact",
+    "fields": {
+      "label": "Critical"
+    }
+  },
+  {
+    "model": "tracker.impact",
+    "fields": {
+      "label": "Major"
+    }
+  },
+  {
+    "model": "tracker.impact",
+    "fields": {
+      "label": "Standard"
+    }
+  },
+  {
+    "model": "tracker.impact",
+    "fields": {
+      "label": "Minor"
+    }
+  },
+  {
+    "model": "tracker.impact",
+    "fields": {
+      "label": "Ineffectual"
+    }
+  },
+  {
+    "model": "tracker.impact",
+    "fields": {
+      "label": "Irrelevant"
+    }
+  }
+]

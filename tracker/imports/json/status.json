@@ -1,0 +1,62 @@
+[
+    {
+        "model": "tracker.status",
+        "fields": {
+            "label": "draft"
+        }
+    },
+    {
+        "model": "tracker.status",
+        "fields": {
+            "label": "open"
+        }
+    },
+    {
+        "model": "tracker.status",
+        "fields": {
+            "label": "dismissed"
+        }
+    },
+    {
+        "model": "tracker.status",
+        "fields": {
+            "label": "on_hold"
+        }
+    },
+    {
+        "model": "tracker.status",
+        "fields": {
+            "label": "planed"
+        }
+    },
+    {
+        "model": "tracker.status",
+        "fields": {
+            "label": "in_progress"
+        }
+    },
+    {
+        "model": "tracker.status",
+        "fields": {
+            "label": "dropped"
+        }
+    },
+    {
+        "model": "tracker.status",
+        "fields": {
+            "label": "ready"
+        }
+    },
+    {
+        "model": "tracker.status",
+        "fields": {
+            "label": "tested"
+        }
+    },
+    {
+        "model": "tracker.status",
+        "fields": {
+            "label": "validated"
+        }
+    }
+]

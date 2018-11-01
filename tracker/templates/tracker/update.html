@@ -1,0 +1,230 @@
+{% extends "backoffice_template.html" %}
+{% load i18n %}
+
+{% block javascript %}
+    <script type="application/javascript">
+
+        $.fn.editable.defaults.mode = 'inline';
+        datatableview.auto_initialize = false;
+
+        $(document).ready(function() {
+
+            $(".helptext").hide();
+
+            $("select.select2").select2();
+
+            $("select.select2-content").select2({
+                ajax: {
+                    url: "{% url 'kaoka_quality_batch:pesticides_content' object.pk %}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, page) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                minimumInputLength: 1,
+                templateResult: function (item) {
+                    if(!item.id) {
+                        return item.text;
+                    }
+                    return '<i>' + item.text + '</i>';
+                },
+                templateSelection: function (item) {
+                    return '<b>' + item.text + '</b>';
+                },
+            });
+
+            $(".form-control.date-picker").datepicker({
+                setDate: new Date(),
+                closeText: 'Fermer',
+                prevText: 'Précédent',
+                nextText: 'Suivant',
+                currentText: 'Aujourd\'hui',
+                monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+                dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+                dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+                weekHeader: 'Sem.',
+                dateFormat: 'yy-mm-dd',
+            });
+
+            TinyMCEStart(".form-control.mce", null);
+
+            var xeditable_options = {};
+            datatableview.initialize($('.datatable'), {
+                fnRowCallback: datatableview.make_xeditable(),
+            });
+
+            $("#content_form").submit(function (event) {
+
+                $form = $(this);
+
+                event.preventDefault();
+
+                tinyMCE.triggerSave();
+
+                $.ajax({
+                    mimeType: "text/html; charset=utf-8",
+                    url: $form.attr('action'),
+                    type: "POST",
+                    data: {
+                        "csrfmiddlewaretoken": $form.find( "input[name='csrfmiddlewaretoken']" ).val(),
+                        "content": $form.find( "select[name='content']" ).val(),
+                        "ppb": $form.find( "input[name='ppb']" ).val(),
+                        "trace": $form.find( "input[name='trace']" ).prop( "checked" ),
+                        "analysis": {{ object.pk }},
+                    },
+                    success: function(data) {
+                        data = $.parseJSON(data);
+                        if (data.success) {
+                            var table = $('#content_table table').dataTable();
+                            table.fnStandingRedraw();
+
+                            $("#content_form").get(0).reset();
+
+                            $(".select2-content").val(null).trigger("change");
+                        } else {
+                            alert(data.message);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Unexpected error: please open a ticket");
+                    },
+                    dataType: "html",
+                    async: false
+                });
+
+            });
+
+            $(".preloader").hide();
+
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+            <div id="details-content">
+
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <div class="col-sm-4">
+
+                            <form class="form-horizontal" role="form" method="post">
+                                <div class="panel panel-primary">
+
+                                    <div class="panel-heading">{% trans "Pesticide test form" %}</div>
+
+                                    <div class="panel-body">
+
+                                            <label for="id_product"><img src="{{ STATIC_URL }}images/Batch.png" width="15px" height="15px" alt="Batch" />{% trans "Batch" %}:</label>
+                                            <input id="id_product" class="form-control" type="text" value="{{ object.batch.label }}" name="" readonly="readonly">
+
+                                            <label for="id_category"><img src="{{ STATIC_URL }}images/Pesticides_Category.png" width="15px" height="15px" alt="Category" />{% trans "Category" %}:</label>
+                                            <input id="id_category" class="form-control" type="text" value="{{ object.category.label }}" name="" readonly="readonly">
+
+                                            <label for="id_actor"><img src="{{ STATIC_URL }}images/Application_Date.png" width="15px" height="15px" alt="Application Date" />{% trans "Date" %}:</label>
+                                            <input id="id_actor" class="form-control" type="text" value="{{ object.application_date }}" name="" readonly="readonly">
+
+                                            {% csrf_token %}
+                                            {{ form }}
+                                    </div>
+
+                                    <div class="panel-footer">
+                                        <div class="btn-toolbar pull-right" role="toolbar">
+                                            <button class="btn-group btn-primary btn-label-left" role="group" type="submit">
+                                                <span><i class="fa fa-caret-square-o-right"></i></span>{% trans "Submit form" %}
+                                            </button>
+                                            <button class="btn-group btn-label-left" role="group" type="cancel">
+                                                <span><i class="fa fa-trash text-danger"></i></span>{% trans "Reset form" %}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+                        <div class="col-sm-8">
+
+                            <div class="panel panel-primary">
+
+                                <div class="panel-heading">{% trans "Detail" %}</div>
+
+                                <div id="content_table">
+                                    {{ content }}
+                                </div>
+
+                                <form id="content_form" class="form-horizontal" role="form" method="post" action="{% url 'kaoka_quality:pesticides_content_add' object.pk %}">
+
+                                    <div class="panel-body">
+                                        <hr />
+                                        <h4>{% trans "Add to report" %}</h4>
+                                        {% csrf_token %}
+                                        {{ content_form }}
+                                    </div>
+
+                                    <div class="panel-footer">
+                                        <div class="btn-toolbar pull-right" role="toolbar">
+                                            <button class="btn-group btn-primary btn-label-left" role="group" type="submit">
+                                                <span><i class="fa fa-caret-square-o-right"></i></span>{% trans "Submit form" %}
+                                            </button>
+                                            <button class="btn-group btn-label-left" role="group" type="reset">
+                                                <span><i class="fa fa-trash text-danger"></i></span>{% trans "Reset form" %}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                                
+
+                                <div class="panel-footer">
+                                    <div class="btn-toolbar pull-left" role="toolbar">
+
+                                        <form role="form" method="post" action="{% url 'kaoka_quality_batch:quality_pesticide_validate' object.id %}">
+                                            {% csrf_token %}
+                                            <button class="btn-group btn-success btn-label-left" role="group" type="submit">
+                                                <i class="fa fa-check-square-o"></i>{% trans "Valider et déclarer" %} <strong>{% trans "Conforme" %}</strong>
+                                            </button>
+                                            <input type="hidden" name="status" value="compliant" />
+                                        </form>
+
+                                    </div>
+
+                                    <div class="btn-toolbar pull-right" role="toolbar">
+
+                                        <form role="form" method="post" action="{% url 'kaoka_quality_batch:quality_pesticide_validate' object.id %}">
+                                            {% csrf_token %}
+                                            <button class="btn-group btn-danger btn-label-left" role="group" type="submit">
+                                                <i class="fa fa-times-circle"></i>{% trans "Valider et déclarer" %} <strong>{% trans "Non Conforme" %}</strong>
+                                            </button>
+                                            <input type="hidden" name="status" value="non_compliant" />
+                                        </form>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

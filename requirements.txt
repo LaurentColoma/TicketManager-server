@@ -1,0 +1,8 @@
+django==1.11
+django-extensions
+django-cors-headers
+djangorestframework
+djangorestframework-jwt
+psycopg2
+django-polymorphic
+django-datatable-view

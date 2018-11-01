@@ -1,0 +1,37 @@
+[
+  {
+    "model": "tracker.timesensitiveness",
+    "fields": {
+      "label": "hours",
+      "color": "#1C1E44"
+    }
+  },
+  {
+    "model": "tracker.timesensitiveness",
+    "fields": {
+      "label": "days",
+      "color": "#DB0073"
+    }
+  },
+  {
+    "model": "tracker.timesensitiveness",
+    "fields": {
+      "label": "weeks",
+      "color": "#FEA347"
+    }
+  },
+  {
+    "model": "tracker.timesensitiveness",
+    "fields": {
+      "label": "months",
+      "color": "#FFDE75"
+    }
+  },
+  {
+    "model": "tracker.timesensitiveness",
+    "fields": {
+      "label": "years",
+      "color": "#F7E269"
+    }
+  }
+]

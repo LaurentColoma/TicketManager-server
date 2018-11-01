@@ -1,0 +1,26 @@
+[
+  {
+    "model": "tracker.reproducibility",
+    "fields": {
+      "label": "always"
+    }
+  },
+  {
+    "model": "tracker.reproducibility",
+    "fields": {
+      "label": "under software conditions"
+    }
+  },
+  {
+    "model": "tracker.reproducibility",
+    "fields": {
+      "label": "under hardware conditions"
+    }
+  },
+  {
+    "model": "tracker.reproducibility",
+    "fields": {
+      "label": "erratic"
+    }
+  }
+]
