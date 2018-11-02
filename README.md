@@ -3,7 +3,7 @@
 
 ### Introduction
 This is the backend of a ticket managing web-application.
-It has been developed using Django [Django](https://www.djangoproject.com/), a high level [Python](https://www.python.org/) framework.
+It has been developed using [Django](https://www.djangoproject.com/), a high level [Python](https://www.python.org/) framework.
 ### Licence
 The entire code is under the [MIT](https://en.wikipedia.org/wiki/MIT_License) licence, you are totally free to re-use it for whatever purpose you want.
 ### Installation
