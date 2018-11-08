@@ -2,7 +2,7 @@
 
 from django.conf import settings
 from django.contrib.auth.models import User
-
+from django.db import models
 from django.db.models import (
     BooleanField,
     CharField,
@@ -63,6 +63,7 @@ class Sprint(Model):
         to=Roadmap,
         null=False,
         blank=False,
+        on_delete=models.DO_NOTHING,
     )
 
     class Meta:  # pylint: disable=too-few-public-methods
@@ -103,6 +104,7 @@ class Version(Model):
         to=Application,
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     #
@@ -130,6 +132,7 @@ class Module(Model):
         to=Application,
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     #
@@ -287,6 +290,7 @@ class Ticket(PolymorphicModel, Model):
         to=User,
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     accountable = ForeignKey(
@@ -296,6 +300,7 @@ class Ticket(PolymorphicModel, Model):
         to=User,
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     consulted_set = ManyToManyField(
@@ -322,7 +327,8 @@ class Ticket(PolymorphicModel, Model):
         help_text=_("state of the ticket"),
         to=Status,
         null=False,
-        blank=False
+        blank=False,
+        on_delete=models.DO_NOTHING,
     )
 
     open = BooleanField(
@@ -338,6 +344,7 @@ class Ticket(PolymorphicModel, Model):
         to=Impact,
         null=False,
         blank=False,
+        on_delete=models.DO_NOTHING,
     )
 
     priority = ForeignKey(
@@ -347,6 +354,7 @@ class Ticket(PolymorphicModel, Model):
         to=Priority,
         null=False,
         blank=False,
+        on_delete=models.DO_NOTHING,
     )
 
     time_sensitiveness = ForeignKey(
@@ -356,6 +364,7 @@ class Ticket(PolymorphicModel, Model):
         to=TimeSensitiveness,
         null=False,
         blank=False,
+        on_delete=models.DO_NOTHING,
     )
 
     original = ForeignKey(
@@ -365,6 +374,7 @@ class Ticket(PolymorphicModel, Model):
         to="self",
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     application = ForeignKey(
@@ -374,6 +384,7 @@ class Ticket(PolymorphicModel, Model):
         to=Application,
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     version_affected_set = ManyToManyField(
@@ -392,6 +403,7 @@ class Ticket(PolymorphicModel, Model):
         to=Version,
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     version_released = ForeignKey(
@@ -401,6 +413,7 @@ class Ticket(PolymorphicModel, Model):
         to=Version,
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     module_set = ManyToManyField(
@@ -419,6 +432,7 @@ class Ticket(PolymorphicModel, Model):
         to=Sprint,
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     roadmap = ForeignKey(
@@ -428,6 +442,7 @@ class Ticket(PolymorphicModel, Model):
         to=Roadmap,
         null=False,
         blank=False,
+        on_delete=models.DO_NOTHING,
     )
 
     start = DateField(
@@ -528,6 +543,7 @@ class TicketComment(Model):
         to=Ticket,
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     author = ForeignKey(
@@ -537,6 +553,7 @@ class TicketComment(Model):
         to=getattr(settings, "AUTH_USER_MODEL", "auth.User"),
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     number = PositiveSmallIntegerField(
@@ -584,6 +601,7 @@ class Task(Ticket):
         to=getattr(settings, "AUTH_USER_MODEL", "auth.User"),
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     commit_number = CharField(
@@ -680,6 +698,7 @@ class Anomaly(Task):
         to=AnomalyCategorie,
         null=False,
         blank=False,
+        on_delete=models.DO_NOTHING,
     )
 
     reproducibility = ForeignKey(
@@ -689,6 +708,7 @@ class Anomaly(Task):
         to=Reproducibility,
         null=True,
         blank=True,
+        on_delete=models.DO_NOTHING,
     )
 
     def get_type_display(self):
@@ -734,6 +754,7 @@ class Comment(Model):
         to=Ticket,
         null=False,
         blank=False,
+        on_delete=models.DO_NOTHING,
     )
 
     class Meta:  # pylint: disable=too-few-public-methods

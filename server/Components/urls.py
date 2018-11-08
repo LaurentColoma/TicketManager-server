@@ -35,12 +35,14 @@ router.register(r'roadmap', views.RoadmapViewSet)
 router.register(r'comment', views.CommentViewSet)
 router.register(r'tickets', views.TicketViewSet)
 
+app_name = "tracker"
+
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', admin.site.urls),
     url(r'^schedule/', include('time_related.urls')),
-    url(r'^index/', include('tracker.urls', namespace="kaoka_tracker")),
-    url(r'^api-token-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^index/', include('tracker.urls')),
+    url(r'^api-token-auth/', include('rest_framework.urls')),
     url(r'^auth-jwt/', obtain_jwt_token),
     url(r'^auth-jwt-refresh/', refresh_jwt_token),
     url(r'^auth-jwt-verify/', verify_jwt_token),

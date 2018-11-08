@@ -1,0 +1,22 @@
+version: '3'
+services:
+    db:
+        image: postgres
+
+    rabbitmq:
+        image: rabbitmq
+        ports:
+        - "5672:5672"
+
+    redis:
+        image: redis
+
+    web:
+        build: .
+        command: bash -c "python ./server/manage.py migrate && python ./server/manage.py runserver 0.0.0.0:8000"
+        volumes:
+        - .:/server
+        ports:
+        - "8000:8000"
+        depends_on:
+        - db

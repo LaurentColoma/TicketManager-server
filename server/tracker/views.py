@@ -5,7 +5,7 @@ from django.contrib.auth.models import User, Group
 from django.views.generic import View, DetailView, CreateView
 from django.http import JsonResponse
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from datatableview.helpers import make_xeditable
 
 from rest_framework import viewsets
