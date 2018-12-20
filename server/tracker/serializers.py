@@ -79,7 +79,7 @@ class SprintSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Sprint
-        fields = ('url', 'label', 'start', 'end', 'roadmap')
+        fields = ('url', 'label', 'roadmap')
 
 
 class RoadmapSerializer(serializers.HyperlinkedModelSerializer):
@@ -125,9 +125,6 @@ class TicketSerializer(serializers.HyperlinkedModelSerializer):
     sprint = serializers.SlugRelatedField(
         queryset=Sprint.objects.all(), slug_field='label', required=True, allow_null=True
     )
-    roadmap = serializers.SlugRelatedField(
-        queryset=Roadmap.objects.all(), slug_field='label', required=True, allow_null=True
-    )
 
     class Meta:
         model = Ticket
@@ -148,10 +145,7 @@ class TicketSerializer(serializers.HyperlinkedModelSerializer):
                   'original',
                   'module_set',
                   'sprint',
-                  'roadmap',
                   'description',
-                  'start',
-                  'end'
                   )
 
 

@@ -54,8 +54,6 @@ class Roadmap(Model):
 class Sprint(Model):
 
     label = CharField("label", max_length=64)
-    start = DateTimeField()
-    end = DateTimeField()
     roadmap = ForeignKey(
         verbose_name=_("roadmap"),
         related_name="sprint",
@@ -433,30 +431,6 @@ class Ticket(PolymorphicModel, Model):
         null=True,
         blank=True,
         on_delete=models.DO_NOTHING,
-    )
-
-    roadmap = ForeignKey(
-        verbose_name=_("roadmap"),
-        related_name="ticket_set",
-        help_text=_("Related Roadmap"),
-        to=Roadmap,
-        null=False,
-        blank=False,
-        on_delete=models.DO_NOTHING,
-    )
-
-    start = DateField(
-        verbose_name=_("Starting Date"),
-        help_text=_("the day the ticket was created"),
-        null=True,
-        blank=True,
-    )
-
-    end = DateField(
-        verbose_name=_("Ending Date"),
-        help_text=_("the day the ticket was closed"),
-        null=True,
-        blank=True,
     )
 
     def compute_name(self):
