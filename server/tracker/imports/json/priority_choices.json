@@ -19,5 +19,12 @@
       "label": "indispensable",
       "color": "#22427C"
     }
+  },
+  {
+    "model": "tracker.priority",
+    "fields": {
+      "label": "TBD",
+      "color": "#FFFFFF"
+    }
   }
 ]

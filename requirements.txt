@@ -3,6 +3,6 @@ django-extensions
 django-cors-headers
 djangorestframework
 djangorestframework-jwt
-psycopg2
+psycopg2-binary
 django-polymorphic
 django-datatable-view

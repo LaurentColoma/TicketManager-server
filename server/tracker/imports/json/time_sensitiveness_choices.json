@@ -33,5 +33,12 @@
       "label": "years",
       "color": "#F7E269"
     }
+  },
+  {
+    "model": "tracker.timesensitiveness",
+    "fields": {
+      "label": "TBD",
+      "color": "#FFFFFF"
+    }
   }
 ]

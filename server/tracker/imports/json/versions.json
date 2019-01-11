@@ -14,5 +14,13 @@
       "label": "V 0.2",
       "application": 1
     }
+  },
+  {
+    "model": "tracker.version",
+    "pk": "3",
+    "fields": {
+      "label": "TBD",
+      "application": 1
+    }
   }
 ]
