@@ -7,7 +7,7 @@ from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 
 from .models import Application, Version, Module, Impact, Priority, TimeSensitiveness, Reproducibility, Ticket, \
-    TicketComment, Process, Proposal, AnomalyCategorie, Anomaly, Status, Sprint, Roadmap, Comment
+    TicketComment, Process, Proposal, AnomalyCategorie, Anomaly, Status, Sprint, Roadmap, Comment, Objective
 
 
 @admin.register(Application)
@@ -17,6 +17,10 @@ class ApplicationAdmin(ModelAdmin):
 
 @admin.register(Version)
 class VersionAdmin(ModelAdmin):
+    pass
+
+@admin.register(Objective)
+class ObjectiveAdmin(ModelAdmin):
     pass
 
 

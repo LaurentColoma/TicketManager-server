@@ -34,6 +34,7 @@ router.register(r'sprint', views.SprintViewSet)
 router.register(r'roadmap', views.RoadmapViewSet)
 router.register(r'comment', views.CommentViewSet)
 router.register(r'tickets', views.TicketViewSet)
+router.register(r'objective', views.ObjectiveViewSet)
 
 app_name = "tracker"
 

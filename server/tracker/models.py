@@ -22,20 +22,20 @@ from django.db.models import (
 )
 from polymorphic.models import PolymorphicModel
 
-# from base.mixins import BaseMixin
-#
-# from util.mixins import StatusMixin
-#
-# from util.models import Status
-
 from django.utils.translation import ugettext_lazy as _
 
+class Objective(Model):
 
-####################
-#                  #
-#   Main ticket    #
-#                  #
-####################
+    label = CharField("label", max_length=256)
+
+    class Meta:
+        """Application Meta class"""
+
+        verbose_name = _("objective")
+        verbose_name_plural = _("objectives")
+
+        def __str__(self):
+            return self.label
 
 class Roadmap(Model):
 
@@ -59,9 +59,18 @@ class Sprint(Model):
         related_name="sprint",
         help_text=_("Related Roadmap"),
         to=Roadmap,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         on_delete=models.DO_NOTHING,
+    )
+    objective = ForeignKey(
+        verbose_name=_("objective"),
+        related_name="objective",
+        help_text=_("Related Objective"),
+        to=Objective,
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING
     )
 
     class Meta:  # pylint: disable=too-few-public-methods
@@ -432,6 +441,15 @@ class Ticket(PolymorphicModel, Model):
         blank=True,
         on_delete=models.DO_NOTHING,
     )
+
+    #depends_on = ManyToManyField(
+    #   verbose_name=_("Depends_On"),
+    #   related_name="ticket_set",
+    #   help_text=_("ticket related to this ticket"),
+    #   to=Ticket,
+    #   null=True,
+    #   blank=True
+    # )
 
     def compute_name(self):
         return "{self.number}_{self.label}".format(self=self)

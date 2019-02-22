@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
-from .models import Ticket, Impact, Priority, TimeSensitiveness, Application, Version, Module, Status
+from .models import Ticket, Impact, Priority, TimeSensitiveness, Application, Version, Module, Status, Objective
 
 from .models import Sprint, Roadmap, Comment
 
@@ -79,7 +79,7 @@ class SprintSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Sprint
-        fields = ('url', 'label', 'roadmap')
+        fields = ('url', 'label', 'roadmap', 'objective')
 
 
 class RoadmapSerializer(serializers.HyperlinkedModelSerializer):
@@ -94,6 +94,12 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Comment
         fields = ('url', 'content', 'date', 'ticket')
+
+class ObjectiveSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Objective
+        fields = ('url', 'label')
 
 
 class TicketSerializer(serializers.HyperlinkedModelSerializer):

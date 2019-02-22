@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from tracker.serializers import TicketSerializer, UserSerializer, GroupSerializer, ImpactSerializer, PrioritySerializer, \
     TimeSensitivenessSerializer, ApplicationSerializer, VersionSerializer, ModuleSerializer, StatusSerializer
 
-from tracker.serializers import SprintSerializer, RoadmapSerializer, CommentSerializer
+from tracker.serializers import SprintSerializer, RoadmapSerializer, CommentSerializer, ObjectiveSerializer
 
 from .models import (
     Ticket,
@@ -29,7 +29,7 @@ from .models import (
     TimeSensitiveness,
     Reproducibility,
     AnomalyCategorie,
-    Status, Sprint, Roadmap, Comment)
+    Status, Sprint, Roadmap, Comment, Objective)
 
 from .forms import (
     TicketMainForm,
@@ -74,6 +74,10 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
+
+class ObjectiveViewSet(viewsets.ModelViewSet):
+    queryset = Status.objects.all()
+    serializer_class = ObjectiveSerializer
 
 class StatusViewSet(viewsets.ModelViewSet):
     queryset = Status.objects.all()
